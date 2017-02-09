@@ -142,11 +142,11 @@ void	ft_get_arg_str(t_spec *spec, va_list ap)
 			spec->str = ft_strdup("(null)");
 
 
-		while (*spec->str)
-		{
-			printf("%x\n", *spec->str);////
-			spec->str++;
-		}
+		//while (*spec->str)
+		//{
+		//	printf("%x\n", *spec->str);////
+		//	spec->str++;
+		//}
 
 
 	
