@@ -6,16 +6,11 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/28 15:15:14 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/14 12:38:45 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/14 14:25:38 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//need to store a pointer to the % every time i handel specifier, so if there is a mistake it just translates it into regualr string and writes it, like %hhhd
-
 #include "ft_printf.h"
-
-
-
 
 int	ft_printf(const char *format, ...)
 {
@@ -25,24 +20,21 @@ int	ft_printf(const char *format, ...)
 
 	va_start(ap, format);
 	char_count = 0;
-	while (*format)//rework this logic
+	while (*format)
 	{
-		while (*format && *format != '%')// print until % or NUL
+		while (*format && *format != '%')
 		{
 			write(1, format++, 1);
 			char_count++;
 		}
 		if (!*format)
 			break;
-		ft_parse_spec(&spec, (char **)&format, ap);//gets all info on specifier, validates?
+		ft_parse_spec(&spec, (char **)&format, ap);
 		char_count += ft_print_spec(&spec);
+		free(spec.mod);
+		free(spec.str);
 	}
-
-
-
-
 	va_end(ap);
-
 	return (char_count);
 }
 
@@ -73,13 +65,13 @@ void	ft_get_arg_str(t_spec *spec, va_list ap)
 		else if (ft_strequ(spec->mod, "j"))
 			spec->str = ft_itoa(va_arg(ap, intmax_t));
 		else if (ft_strequ(spec->mod, "z"))
-			spec->str = ft_itoa(va_arg(ap, size_t)); ////////
+			spec->str = ft_itoa(ft_get_signed_size_t(ap));			
 		else 
 			spec->str = ft_itoa(va_arg(ap, int));
 	}
 
 
-	else if (ft_tolower(c) == 'u' || ft_tolower(c) == 'o' || ft_tolower(c) == 'x')
+	else if (ft_tolower(c) == 'u' || ft_tolower(c) == 'o' || ft_tolower(c) == 'x' || c == 'b')
 	{
 		if (ft_strequ(spec->mod, "l") || c == 'O' || c == 'U')
 			int_arg = va_arg(ap, unsigned long);
@@ -99,18 +91,20 @@ void	ft_get_arg_str(t_spec *spec, va_list ap)
 		if (ft_tolower(c) == 'u')
 			spec->str = ft_itoa_base(int_arg, 10, 0);
 		else if (ft_tolower(c) == 'o')
-			spec->str = ft_itoa_base(int_arg, 8, 0);//add flag to indicate upper or lower case a-f
+			spec->str = ft_itoa_base(int_arg, 8, 0);
 		else if (c == 'x')
 			spec->str = ft_itoa_base(int_arg, 16, 0);
-		else 
+		else if (c == 'X')
 			spec->str = ft_itoa_base(int_arg, 16, 1);
+		else
+			spec->str = ft_itoa_base(int_arg, 2, 0);
 	}
 
 
 	else if (ft_tolower(c) == 'c')
 	{
 		wchar_t	*temp_wc_str;
-		if ((ft_strequ(spec->mod, "l") || c == 'C') && MB_CUR_MAX > 1)
+		if ((ft_strequ(spec->mod, "l") || c == 'C')) //&& MB_CUR_MAX > 1)////////
 		{
 			if (!(temp_wc_str = (wchar_t *)malloc(sizeof(wchar_t))))
 				ft_crash();
@@ -185,7 +179,7 @@ void	ft_get_arg_str(t_spec *spec, va_list ap)
 
 
 
-void	ft_parse_spec(t_spec *spec, char **format, va_list ap)//need to add validation, deal with %%
+void	ft_parse_spec(t_spec *spec, char **format, va_list ap)
 {
 	*spec = (t_spec) {0, 0, 0, 0, 0, 0, -1, 0, 0, 0};
 	(*format)++;
@@ -194,7 +188,6 @@ void	ft_parse_spec(t_spec *spec, char **format, va_list ap)//need to add validat
 	ft_handle_precision(spec, format);
 	ft_handle_type(spec, format);
 	ft_get_arg_str(spec, ap);
-//printf("str: %s\n", spec->str);
 	ft_handle_overrides(spec);
 }
 
@@ -204,14 +197,14 @@ void	ft_parse_spec(t_spec *spec, char **format, va_list ap)//need to add validat
 
 
 
-void	ft_handle_overrides(t_spec *spec)//some orders mattr some don't with s at bottom it does, nee dto handle %%
+void	ft_handle_overrides(t_spec *spec)//some orders mattr some don't with s at bottom it does
 {
 	char c;
 
 	c = spec->c;
 	if (spec->precision >= 0 &&
 			(ft_tolower(c) == 'd' || c == 'i' || ft_tolower(c) == 'o' ||
-			 ft_tolower(c) == 'u' || ft_tolower(c) == 'x'))
+			 ft_tolower(c) == 'u' || ft_tolower(c) == 'x' || c == 'b'))
 		spec->zero = 0;
 	if (spec->minus)
 		spec->zero = 0;
@@ -224,7 +217,7 @@ void	ft_handle_overrides(t_spec *spec)//some orders mattr some don't with s at b
 		spec->space = 0;
 	if (c == 'p')
 		spec->octo = 1;
-	if (ft_tolower(c) != 'o' && ft_tolower(c) != 'x' && c != 'p')
+	if (ft_tolower(c) != 'o' && ft_tolower(c) != 'x' && c != 'p' && c != 'b')
 		spec->octo = 0;
 	if (ft_tolower(c) == 'x' && ft_strequ(spec->str, "0"))
 		spec->octo = 0;
@@ -268,7 +261,10 @@ void	ft_handle_type(t_spec *spec, char **format)
 	if (**format && ft_is_modifier(spec->mod))
 		spec->c = *(*format)++;
 	else
-		ft_error();//need to return value to tell it to just normal print //will all other issues get caught here? %..5c, or things in the worng order, %.7+hhi
+	{
+		free(spec->mod);
+		ft_error();//will all other issues get caught here? %..5c, or things in the worng order, %.7+hhi
+	}
 }
 
 
@@ -293,6 +289,7 @@ int		ft_is_conversion(char c)
 			c == '%' ||
 			c == 'p' ||
 			c == 'i' ||
+			c == 'b' ||
 			ft_tolower(c) == 'd' ||
 			ft_tolower(c) == 'o' ||
 			ft_tolower(c) == 'u' ||
@@ -337,7 +334,7 @@ void	ft_handle_min_width(t_spec *spec, char **format)
 
 
 
-void	ft_handle_flags(t_spec *spec, char **format) ///what is format is like "hello %++++++++++++++"?
+void	ft_handle_flags(t_spec *spec, char **format)
 {
 	while (1)
 	{	
@@ -356,4 +353,28 @@ void	ft_handle_flags(t_spec *spec, char **format) ///what is format is like "hel
 		(*format)++;
 	}
 }
+
+
+
+
+intmax_t	ft_get_signed_size_t(va_list ap)
+{
+	if (sizeof(size_t) == sizeof(char))
+		return (va_arg(ap, char));
+	else if (sizeof(size_t) == sizeof(short))
+		return (va_arg(ap, short));
+	else if (sizeof(size_t) == sizeof(int))
+		return (va_arg(ap, int));
+	else if (sizeof(size_t) == sizeof(long))
+		return (va_arg(ap, long));
+	else if (sizeof(size_t) == sizeof(long long))
+		return (va_arg(ap, long long));
+	else
+		return (va_arg(ap, intmax_t));
+}
+
+
+
+
+
 
