@@ -6,7 +6,7 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/28 15:15:14 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/14 12:09:35 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/14 12:38:45 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,11 +109,14 @@ void	ft_get_arg_str(t_spec *spec, va_list ap)
 
 	else if (ft_tolower(c) == 'c')
 	{
-		if (ft_strequ(spec->mod, "l") || c == 'C')
+		wchar_t	*temp_wc_str;
+		if ((ft_strequ(spec->mod, "l") || c == 'C') && MB_CUR_MAX > 1)
 		{
-			if (!(spec->str = (char *)malloc(sizeof(wchar_t))))/////
+			if (!(temp_wc_str = (wchar_t *)malloc(sizeof(wchar_t))))
 				ft_crash();
-			*(wchar_t*)spec->str = va_arg(ap, wchar_t); ////huh unicode what ?????????
+			*temp_wc_str = va_arg(ap, wchar_t);
+			spec->str = ft_to_multibyte(temp_wc_str);
+			free(temp_wc_str);
 		}
 		else
 			spec->str = ft_memset(ft_strnew(1), (unsigned char)va_arg(ap, int), 1);
@@ -223,7 +226,9 @@ void	ft_handle_overrides(t_spec *spec)//some orders mattr some don't with s at b
 		spec->octo = 1;
 	if (ft_tolower(c) != 'o' && ft_tolower(c) != 'x' && c != 'p')
 		spec->octo = 0;
-	if ((ft_tolower(c) == 'x' || ft_tolower(c) == 'o') && ft_strequ(spec->str, "0"))
+	if (ft_tolower(c) == 'x' && ft_strequ(spec->str, "0"))
+		spec->octo = 0;
+	if (ft_tolower(c) == 'o' && ft_strequ(spec->str, "0") && !(spec->precision == 0))
 		spec->octo = 0;
 	if (ft_tolower(c) == 's' && spec->precision >= 0 && (int)ft_strlen(spec->str) > spec->precision)
 		spec->str[spec->precision] = 0;
@@ -231,7 +236,6 @@ void	ft_handle_overrides(t_spec *spec)//some orders mattr some don't with s at b
 		spec->precision = -1;
 	if (spec->precision == 0 && ft_strequ(spec->str, "0"))
 		spec->str[0] = 0;
-
 }
 
 
