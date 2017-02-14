@@ -6,7 +6,7 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/28 15:15:14 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/14 12:07:27 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/14 12:08:43 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,7 +223,7 @@ void	ft_handle_overrides(t_spec *spec)//some orders mattr some don't with s at b
 		spec->octo = 1;
 	if (ft_tolower(c) != 'o' && ft_tolower(c) != 'x' && c != 'p')
 		spec->octo = 0;
-	if ((ft_tolower(c) == 'x' ft_lower(c) == 'o') && ft_strequ(spec->str, "0"))
+	if ((ft_tolower(c) == 'x' ft_tolower(c) == 'o') && ft_strequ(spec->str, "0"))
 		spec->octo = 0;
 	if (ft_tolower(c) == 's' && spec->precision >= 0 && (int)ft_strlen(spec->str) > spec->precision)
 		spec->str[spec->precision] = 0;
