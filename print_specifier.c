@@ -6,7 +6,7 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/30 20:54:23 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/09 11:44:34 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/14 14:02:03 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,10 @@ void	ft_print_prefix(t_spec *spec, int *is_neg)
 		write(1, "0", 1);
 	else if (spec->octo && spec->c == 'X')
 		write(1, "0X", 2);
-	else if (spec->octo)
+	else if (spec->octo && spec->c == 'x')
 		write(1, "0x", 2);
+	else if (spec->octo && spec->c == 'b')
+		write(1, "0b", 2);
 }
 	
 
