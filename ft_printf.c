@@ -6,7 +6,7 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/28 15:15:14 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/14 16:32:08 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/14 17:03:24 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,20 +104,17 @@ void	ft_get_arg_str(t_spec *spec, va_list ap)
 	else if (ft_tolower(c) == 'c')
 	{
 		wchar_t	*temp_wc_str;
-		if ((ft_strequ(spec->mod, "l") || c == 'C'))// && MB_CUR_MAX > 1)////////
+		if ((ft_strequ(spec->mod, "l") || c == 'C') && MB_CUR_MAX > 1)////////
 		{
-			//write(1, "a\n", 2);/////
-			if (!(temp_wc_str = (wchar_t *)malloc(sizeof(wchar_t))))
+			if (!(temp_wc_str = (wchar_t *)ft_memalloc(sizeof(wchar_t) * 2)))
 				ft_crash();
-			*temp_wc_str = va_arg(ap, wchar_t);
+			temp_wc_str[0] = va_arg(ap, wchar_t);
+			temp_wc_str[1] = 0;
 			spec->str = ft_to_multibyte(temp_wc_str);
 			free(temp_wc_str);
 		}
 		else
-		{///
-			//write(1, "b\n", 2);/////
 			spec->str = ft_memset(ft_strnew(1), (unsigned char)va_arg(ap, int), 1);
-		}/////
 	}
 
 
