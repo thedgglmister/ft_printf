@@ -6,7 +6,7 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/30 17:27:52 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/14 13:00:53 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/14 18:07:59 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@ typedef struct	s_spec
 //ft_printf.c
 int			ft_printf(const char *format, ...);
 void		ft_get_arg_str(t_spec *spec, va_list ap);
+void		ft_get_di_str(t_spec *spec, va_list ap, char c, char *mod);
+void		ft_get_ouxb_str(t_spec *spec, va_list ap, char c, char *mod);
+void		ft_get_c_str(t_spec *spec, va_list ap, char c, char *mod);
+void		ft_get_s_str(t_spec *spec, va_list ap, char c, char *mod);
 void    	ft_parse_spec(t_spec *spec, char **format, va_list ap);
 void		ft_handle_type(t_spec *spec, char **format);
 int 	    ft_is_modifier(char *c);

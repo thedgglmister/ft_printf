@@ -6,7 +6,7 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/09 15:28:40 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/14 17:03:00 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/14 17:29:45 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,7 @@ void	ft_encode_wc(wchar_t wc, char *mb_str, int *j)
 
 int		ft_get_mb_len(wchar_t wc)
 {
-	if (wc < 0x00000000)
-		return (0);
-	else if (wc < 0x00000080)
+	if (wc < 0x00000080)
 		return (1);
 	else if (wc < 0x00000800)
 		return (2);
