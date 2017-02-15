@@ -6,7 +6,7 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/28 15:15:14 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/14 16:27:17 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/14 16:32:08 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_printf(const char *format, ...)
 	va_list ap;
 	t_spec spec;
 	int char_count;
-printf("%d\n\n\n\n\n", MB_CUR_MAX);
+
 	va_start(ap, format);
 	char_count = 0;
 	while (*format)
