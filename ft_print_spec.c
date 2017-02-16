@@ -6,7 +6,7 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/30 20:54:23 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/14 21:17:52 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/15 21:56:04 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int		ft_print_spec(t_spec *spec)
 	int		total;
 	char	pad;
 	int		is_neg;
-
+//printf("%d %d %d %d %d %d %d %s %s %c\n", spec->zero, spec->minus, spec->plus, spec->space, spec->octo, spec->min_width, spec->precision, spec->mod, spec->str, spec->c);
 	ft_get_lens(spec, &pad_len, &prec_len, &total);
 
 //printf("pad len: %d, precision len: %d, total %d, str:%s\n", pad_len, prec_len, total, spec->str);
@@ -68,7 +68,9 @@ void	ft_get_lens(t_spec *spec, int *pad_len, int *prec_len, int *total)
 {
 	int len;
 
-	len = ft_tolower(spec->c) == 'c' ? 1 : ft_strlen(spec->str);
+	len = ft_strlen(spec->str);
+	if (ft_tolower(spec->c) == 'c' && *spec->str == '\0')
+		len++;
 	if (spec->precision - len + (*spec->str == '-') > 0)
 		*prec_len = spec->precision - len + (*spec->str == '-');
 	else
