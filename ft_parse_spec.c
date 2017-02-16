@@ -6,7 +6,7 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/28 15:15:14 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/14 21:14:43 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/15 19:48:11 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,39 +16,61 @@ void	ft_parse_spec(t_spec *spec, char **format, va_list ap)
 {
 	*spec = (t_spec) {0, 0, 0, 0, 0, 0, -1, 0, 0, 0};
 	(*format)++;
-	ft_handle_flags(spec, format);
-	ft_handle_min_width(spec, format);
-	ft_handle_precision(spec, format);
-	ft_handle_type(spec, format);
-	ft_get_arg_str(spec, ap);
-	ft_handle_overrides(spec, spec->c);
-}
-
-void	ft_handle_type(t_spec *spec, char **format)
-{
-	int i;
-
-	i = 0;
-	while (ft_is_modifier(**format))
+	while (1)
 	{
-		i++;
-		(*format)++;
-	}
-	spec->mod = ft_strndup(*format - i, i);
-	spec->c = *(*format)++;
-	//else
-	//{
-	//	free(spec->mod);
-	//	*spec = (t_spec) {0, 0, 0, 0, 0, 0, -1, 0, ' ', 0};
-	//}
+		if (ft_is_flag(**format))
+			ft_handle_flags(spec, format);
+		else if (ft_isdigit(**format) || **format == '*')
+			ft_handle_min_width(spec, format, ap);
+		else if (**format == '.')
+			ft_handle_precision(spec, format, ap);
+		else if (ft_is_modifier(**format))
+			ft_handle_modifier(spec, format);
+		else
+		{
+			spec->c = **format;
+			if (**format)
+				(*format)++;
+			ft_get_arg_str(spec, ap);
+			ft_handle_overrides(spec, spec->c);
+			break ;
+		}
+	}		
 }
 
-void	ft_handle_precision(t_spec *spec, char **format)
+
+void	ft_handle_modifier(t_spec *spec, char **format) //what if i override l on a ls or lc with a zc(? dont know what this does?) or an lzc
 {
-	if (**format != '.')
-		return ;
+	if (**format == 'h' && *(*format + 1) == 'h' && spec->mod < 1)
+		spec->mod = 1;
+	else if (**format == 'l' && *(*format + 1) == 'l' && spec->mod < 4)
+		spec->mod = 4;
+	else if (**format == 'h' && spec->mod < 2)
+		spec->mod = 2;
+	else if (**format == 'l' && spec->mod < 3)
+		spec->mod = 3;
+	else if (**format == 'j' && spec->mod < 5)
+		spec->mod = 5;
+	else if (**format == 'z')
+		spec->mod = 6;
+	*format += (spec->mod == 1 || spec->mod == 4 ? 2 : 1);
+}
+
+
+
+void	ft_handle_precision(t_spec *spec, char **format, va_list ap)
+{
+	long wildcard;
+
 	(*format)++;
 	spec->precision = 0;
+	if (**format == '*')
+	{
+		wildcard = va_arg(ap, int);
+		spec->precision = (wildcard < 0 ? -1 : wildcard);
+		(*format)++;
+		return ;
+	}
 	while (ft_isdigit(**format))
 	{
 		spec->precision *= 10;
@@ -57,12 +79,24 @@ void	ft_handle_precision(t_spec *spec, char **format)
 	}
 }
 
-void	ft_handle_min_width(t_spec *spec, char **format)
+void	ft_handle_min_width(t_spec *spec, char **format, va_list ap)
 {
-	while (ft_isdigit(**format))
+	long wildcard;
+
+	spec->min_width = 0;
+	while (ft_isdigit(**format) || **format == '*')
 	{
 		spec->min_width *= 10;
 		spec->min_width += **format - '0';
+		if (**format == '*')
+		{
+			wildcard = va_arg(ap, int);
+			if (wildcard < 0)
+				spec->minus = 1;
+			spec->min_width = (wildcard < 0 ? -wildcard : wildcard);
+			if (ft_isdigit(*(*format + 1)))
+			spec->min_width = 0;	
+		}
 		(*format)++;
 	}
 }
@@ -85,4 +119,11 @@ void	ft_handle_flags(t_spec *spec, char **format)
 			return ;
 		(*format)++;
 	}
+}
+
+int		ft_is_flag(char c)
+{
+	if (c == '+' || c == '-' || c == '#' || c == ' ' || c == '0')
+		return (1);
+	return (0);
 }

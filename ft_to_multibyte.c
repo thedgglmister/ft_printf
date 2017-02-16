@@ -6,15 +6,16 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/09 15:28:40 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/14 19:15:16 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/16 01:23:18 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-char	*ft_to_multibyte(wchar_t *wc_str)
+char	*ft_to_multibyte(wchar_t *wc_str, int prec)
 {
 	char	*mb_str;
+	int		byte_count;
 	int		byte_total;
 	int		i;
 	int		j;
@@ -24,14 +25,18 @@ char	*ft_to_multibyte(wchar_t *wc_str)
 	byte_total = 0;
 	i = -1;
 	while (wc_str[++i])
-		byte_total += ft_get_mb_len(wc_str[i]);
+	{
+		byte_count = ft_get_mb_len(wc_str[i]);
+		if (prec == -1 || byte_total + byte_count <= prec)
+			byte_total += ft_get_mb_len(wc_str[i]);
+	}
 	if (!(mb_str = (char*)malloc(byte_total + 1)))
 		ft_crash();
 	ft_memset(mb_str, 128, byte_total);
 	mb_str[byte_total] = 0;
 	i = -1;
 	j = 0;
-	while (wc_str[++i])
+	while (wc_str[++i] && j != byte_total)
 		ft_encode_wc(wc_str[i], mb_str, &j);
 	return (mb_str);
 }

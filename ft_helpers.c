@@ -6,7 +6,7 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/28 15:15:14 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/14 21:44:11 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/14 23:20:08 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,14 @@ void		ft_handle_overrides(t_spec *spec, char c)
 			|| (ft_strequ(spec->str, "0") && (ft_tolower(c) == 'x'
 			|| (ft_tolower(c) == 'o' && !(spec->precision == 0)))))
 		spec->octo = 0;
+	if (ft_tolower(c) == 'o' && spec->precision > (int)ft_strlen(spec->str))
+		spec->octo = 0;
 	if (ft_tolower(c) == 's' && spec->precision >= 0 &&
 			(int)ft_strlen(spec->str) > spec->precision)
 		spec->str[spec->precision] = 0;
 	if (ft_tolower(c) == 'c' || ft_tolower(c) == 's' || c == '%')
 		spec->precision = -1;
-	if (spec->precision == 0 && ft_atoi(spec->str) == 0)
+	if (spec->precision == 0 && ft_atoi(spec->str) == 0 && *spec->str == '0')
 		spec->str[0] = 0;
 }
 

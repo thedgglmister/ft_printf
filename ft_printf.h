@@ -6,7 +6,7 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/30 17:27:52 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/14 21:55:33 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/16 00:25:59 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ typedef struct	s_spec
 	int		octo;
 	int		min_width;
 	int		precision;
-	char	*mod;
+	int		mod;
 	char	c;
 	char	*str;
 }				t_spec;
@@ -42,19 +42,20 @@ int				ft_printf(const char *format, ...);
 **ft_get_arg_str.c
 */
 void			ft_get_arg_str(t_spec *spec, va_list ap);
-void			ft_get_di_str(t_spec *spec, va_list ap, char c, char *mod);
-void			ft_get_ouxb_str(t_spec *spec, va_list ap, char c, char *mod);
-void			ft_get_c_str(t_spec *spec, va_list ap, char c, char *mod);
-void			ft_get_s_str(t_spec *spec, va_list ap, char c, char *mod);
+void			ft_get_di_str(t_spec *spec, va_list ap, char c, int mod);
+void			ft_get_ouxb_str(t_spec *spec, va_list ap, char c, int mod);
+void			ft_get_c_str(t_spec *spec, va_list ap, char c, int mod);
+void			ft_get_s_str(t_spec *spec, va_list ap, char c, int mod);
 
 /*
 **ft_parse_spec.c
 */
 void			ft_parse_spec(t_spec *spec, char **format, va_list ap);
-void			ft_handle_type(t_spec *spec, char **format);
-void			ft_handle_precision(t_spec *spec, char **format);
-void			ft_handle_min_width(t_spec *spec, char **format);
+void			ft_handle_precision(t_spec *spec, char **format, va_list ap);
+void			ft_handle_min_width(t_spec *spec, char **format, va_list ap);
+void			ft_handle_modifier(t_spec *spec, char **format);
 void			ft_handle_flags(t_spec *spec, char **format);
+int				ft_is_flag(char c);
 
 /*
 **ft_helpers.c
@@ -76,7 +77,7 @@ void			ft_get_lens(\
 /*
 **ft_to_multibyte.c
 */
-char			*ft_to_multibyte(wchar_t *wc_str);
+char			*ft_to_multibyte(wchar_t *wc_str, int prec);
 void			ft_encode_wc(wchar_t wc, char *mb_str, int *j);
 int				ft_get_mb_len(wchar_t wc);
 
