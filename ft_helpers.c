@@ -6,7 +6,7 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/28 15:15:14 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/14 23:20:08 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/16 15:26:05 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int			ft_is_conversion(char c)
 			c == 'p' ||
 			c == 'i' ||
 			c == 'b' ||
+			c == 'n' ||
 			ft_tolower(c) == 'd' ||
 			ft_tolower(c) == 'o' ||
 			ft_tolower(c) == 'u' ||

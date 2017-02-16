@@ -6,7 +6,7 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/30 17:27:52 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/16 00:25:59 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/16 15:28:44 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,17 @@ int				ft_printf(const char *format, ...);
 /*
 **ft_get_arg_str.c
 */
-void			ft_get_arg_str(t_spec *spec, va_list ap);
+void			ft_get_arg_str(t_spec *spec, va_list ap, int cc);
 void			ft_get_di_str(t_spec *spec, va_list ap, char c, int mod);
 void			ft_get_ouxb_str(t_spec *spec, va_list ap, char c, int mod);
 void			ft_get_c_str(t_spec *spec, va_list ap, char c, int mod);
 void			ft_get_s_str(t_spec *spec, va_list ap, char c, int mod);
+void			ft_set_n_val(va_list ap, int mod, int cc);
 
 /*
 **ft_parse_spec.c
 */
-void			ft_parse_spec(t_spec *spec, char **format, va_list ap);
+void			ft_parse_spec(t_spec *spec, char **format, va_list ap, int cc);
 void			ft_handle_precision(t_spec *spec, char **format, va_list ap);
 void			ft_handle_min_width(t_spec *spec, char **format, va_list ap);
 void			ft_handle_modifier(t_spec *spec, char **format);

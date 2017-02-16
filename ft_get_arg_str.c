@@ -6,13 +6,13 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/28 15:15:14 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/16 00:26:47 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/16 15:28:48 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void	ft_get_arg_str(t_spec *spec, va_list ap)
+void	ft_get_arg_str(t_spec *spec, va_list ap, int cc)
 {
 	char	c;
 	int		mod;
@@ -31,8 +31,28 @@ void	ft_get_arg_str(t_spec *spec, va_list ap)
 		spec->str = ft_itoa_base((uintmax_t)va_arg(ap, void*), 16, 0);
 	else if (c == '%')
 		spec->str = ft_strdup("%");
+	else if (c == 'n')
+		ft_set_n_val(ap, mod, cc);
 	else
 		spec->str = ft_memset(ft_strnew(1), spec->c, 1);
+}
+
+void	ft_set_n_val(va_list ap, int mod, int cc)
+{
+	if (mod == 1)
+		*va_arg(ap, char*) = (char)cc;
+	else if (mod == 2)
+		*va_arg(ap, short*) = (short)cc;
+	else if (mod == 3)
+		*va_arg(ap, long*) = cc;
+	else if (mod == 4)
+		*va_arg(ap, long long*) = cc;
+	else if (mod == 5)
+		*va_arg(ap, intmax_t*) = cc;
+	else if (mod == 6)
+		*va_arg(ap, size_t*) = cc;
+	else
+		*va_arg(ap, int*) = cc;
 }
 
 void	ft_get_di_str(t_spec *spec, va_list ap, char c, int mod)

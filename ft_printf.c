@@ -6,7 +6,7 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/28 15:15:14 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/15 23:44:17 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/16 15:08:50 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ int	ft_printf(const char *format, ...)
 		}
 		if (!*format)
 			break ;
-		ft_parse_spec(&spec, (char **)&format, ap);
+		ft_parse_spec(&spec, (char **)&format, ap, char_count);
+		if (spec.c == 'n')
+			continue ;
 		char_count += ft_print_spec(&spec);
 		free(spec.str);
 	}

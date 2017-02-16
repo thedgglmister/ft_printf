@@ -6,15 +6,15 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/28 15:15:14 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/15 19:48:11 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/16 15:27:11 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void	ft_parse_spec(t_spec *spec, char **format, va_list ap)
+void	ft_parse_spec(t_spec *spec, char **format, va_list ap, int cc)
 {
-	*spec = (t_spec) {0, 0, 0, 0, 0, 0, -1, 0, 0, 0};
+	*spec = (t_spec){0, 0, 0, 0, 0, 0, -1, 0, 0, 0};
 	(*format)++;
 	while (1)
 	{
@@ -31,7 +31,7 @@ void	ft_parse_spec(t_spec *spec, char **format, va_list ap)
 			spec->c = **format;
 			if (**format)
 				(*format)++;
-			ft_get_arg_str(spec, ap);
+			ft_get_arg_str(spec, ap, cc);
 			ft_handle_overrides(spec, spec->c);
 			break ;
 		}
