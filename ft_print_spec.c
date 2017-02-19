@@ -6,40 +6,11 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/30 20:54:23 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/15 21:56:04 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/18 20:26:35 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-
-int		ft_print_spec(t_spec *spec)
-{
-	int		pad_len;
-	int		prec_len;
-	int		total;
-	char	pad;
-	int		is_neg;
-//printf("%d %d %d %d %d %d %d %s %s %c\n", spec->zero, spec->minus, spec->plus, spec->space, spec->octo, spec->min_width, spec->precision, spec->mod, spec->str, spec->c);
-	ft_get_lens(spec, &pad_len, &prec_len, &total);
-
-//printf("pad len: %d, precision len: %d, total %d, str:%s\n", pad_len, prec_len, total, spec->str);
-
-	pad = (spec->zero ? '0' : ' ');
-	if (spec->zero)
-		ft_print_prefix(spec, &is_neg);
-	while (!spec->minus && pad_len--)
-		write(1, &pad, 1);
-	if (!spec->zero)
-		ft_print_prefix(spec, &is_neg);
-	while (prec_len--)
-		write(1, "0", 1);
-	ft_putstr(spec->str + is_neg);
-	if (ft_tolower(spec->c) == 'c' && !(*spec->str))
-		write(1, spec->str, 1);
-	while (pad_len-- > 0)
-		write(1, " ", 1);
-	return (total);////if c or s is empty or NUL, what should total be? 
-}
 
 void	ft_print_prefix(t_spec *spec, int *is_neg)
 {
@@ -64,7 +35,7 @@ void	ft_print_prefix(t_spec *spec, int *is_neg)
 		write(1, "0x", 2);
 }
 
-void	ft_get_lens(t_spec *spec, int *pad_len, int *prec_len, int *total)
+int		ft_get_lens(t_spec *spec, int *pad_len, int *prec_len, int *comma_cnt)
 {
 	int len;
 
@@ -76,6 +47,8 @@ void	ft_get_lens(t_spec *spec, int *pad_len, int *prec_len, int *total)
 	else
 		*prec_len = 0;
 	len += *prec_len;
+	*comma_cnt = spec->comma ? (len - 1 - (*spec->str == '-')) / 3 : 0;
+	len += *comma_cnt;
 	if (ft_tolower(spec->c) == 'o' && spec->octo)
 		len++;
 	else if (spec->octo)
@@ -83,5 +56,33 @@ void	ft_get_lens(t_spec *spec, int *pad_len, int *prec_len, int *total)
 	if ((spec->space || spec->plus) && ft_isdigit(*spec->str))
 		len++;
 	*pad_len = (spec->min_width > len ? spec->min_width - len : 0);
-	*total = (spec->min_width > len ? spec->min_width : len);
+	return ((spec->min_width > len ? spec->min_width : len));
+}
+
+void	ft_put_comma_str(char *str, int prec_len, int comma_cnt)
+{
+	int len;
+	int	front_digits;
+	int other_digits;
+
+	len = ft_strlen(str) + prec_len;
+	front_digits = (len % 3 ? len % 3 : 3);
+	other_digits = (comma_cnt * 3) + comma_cnt;
+	while (front_digits--)
+	{
+		if (prec_len && prec_len--)
+			write(1, "0", 1);
+		else
+			write(1, str++, 1);
+	}
+	while (other_digits)
+	{
+		if (other_digits % 4 == 0)
+			write(1, ",", 1);
+		else if (prec_len && prec_len--)
+			write(1, "0", 1);
+		else
+			write(1, str++, 1);
+		other_digits--;
+	}
 }

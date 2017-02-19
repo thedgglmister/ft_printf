@@ -6,36 +6,11 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/28 15:15:14 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/16 15:28:48 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/18 20:26:51 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-
-void	ft_get_arg_str(t_spec *spec, va_list ap, int cc)
-{
-	char	c;
-	int		mod;
-
-	c = spec->c;
-	mod = spec->mod;
-	if (ft_tolower(c) == 'd' || c == 'i')
-		ft_get_di_str(spec, ap, c, mod);
-	else if (ft_is_diouxb(c))
-		ft_get_ouxb_str(spec, ap, c, mod);
-	else if (ft_tolower(c) == 'c')
-		ft_get_c_str(spec, ap, c, mod);
-	else if (ft_tolower(c) == 's')
-		ft_get_s_str(spec, ap, c, mod);
-	else if (c == 'p')
-		spec->str = ft_itoa_base((uintmax_t)va_arg(ap, void*), 16, 0);
-	else if (c == '%')
-		spec->str = ft_strdup("%");
-	else if (c == 'n')
-		ft_set_n_val(ap, mod, cc);
-	else
-		spec->str = ft_memset(ft_strnew(1), spec->c, 1);
-}
 
 void	ft_set_n_val(va_list ap, int mod, int cc)
 {
@@ -107,7 +82,6 @@ void	ft_get_c_str(t_spec *spec, va_list ap, char c, int mod)
 
 	if ((mod >= 3 || c == 'C') && MB_CUR_MAX > 1)
 	{
-
 		if (!(temp_wc_str = (wchar_t *)malloc(sizeof(wchar_t) * 2)))
 			ft_crash();
 		temp_wc_str[0] = va_arg(ap, wchar_t);

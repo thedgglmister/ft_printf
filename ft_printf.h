@@ -6,7 +6,7 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/30 17:27:52 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/16 15:28:44 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/18 20:20:10 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <stdarg.h>
 # include <unistd.h>
 # include <stdlib.h>
-#include <stdio.h>///////
 
 typedef struct	s_spec
 {
@@ -26,6 +25,7 @@ typedef struct	s_spec
 	int		space;
 	int		zero;
 	int		octo;
+	int		comma;
 	int		min_width;
 	int		precision;
 	int		mod;
@@ -37,6 +37,8 @@ typedef struct	s_spec
 **ft_printf.c
 */
 int				ft_printf(const char *format, ...);
+void			ft_parse_spec(t_spec *spec, char **format, va_list ap, int cc);
+int				ft_print_spec(t_spec *spec);
 
 /*
 **ft_get_arg_str.c
@@ -51,7 +53,6 @@ void			ft_set_n_val(va_list ap, int mod, int cc);
 /*
 **ft_parse_spec.c
 */
-void			ft_parse_spec(t_spec *spec, char **format, va_list ap, int cc);
 void			ft_handle_precision(t_spec *spec, char **format, va_list ap);
 void			ft_handle_min_width(t_spec *spec, char **format, va_list ap);
 void			ft_handle_modifier(t_spec *spec, char **format);
@@ -70,10 +71,10 @@ int				ft_is_diouxb(char c);
 /*
 **ft_print_spec.c
 */
-int				ft_print_spec(t_spec *spec);
 void			ft_print_prefix(t_spec *spec, int *is_neg);
-void			ft_get_lens(\
-					t_spec *spec, int *pad_len, int *prec_len, int *total);
+int				ft_get_lens(\
+					t_spec *spec, int *pad_len, int *prec_len, int *comma_cnt);
+void			ft_put_comma_str(char *str, int prec_len, int comma_count);
 
 /*
 **ft_to_multibyte.c

@@ -6,7 +6,7 @@
 /*   By: biremong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/28 15:15:14 by biremong          #+#    #+#             */
-/*   Updated: 2017/02/16 15:26:05 by biremong         ###   ########.fr       */
+/*   Updated: 2017/02/18 20:26:45 by biremong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void		ft_handle_overrides(t_spec *spec, char c)
 	{
 		spec->space = 0;
 		spec->plus = 0;
+		spec->comma = (ft_tolower(c) == 'u' ? spec->comma : 0);
 	}
 	if (spec->plus)
 		spec->space = 0;
