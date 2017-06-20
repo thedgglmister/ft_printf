@@ -16,7 +16,7 @@ Functions allowed: ```write, malloc, free, exit, & the functions of man 3 stdarg
 
 The Project is written in C and in accordance with "The Norm".
 
---The Norm--
+#### --The Norm--
 
     • Functions must not exceed 25 lines
     • No more than 5 function-definitions in a .c file
