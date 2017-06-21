@@ -14,7 +14,7 @@ The goal of ft_printf is to recreate the full formatted string functionality of 
 
 Functions allowed: ```write, malloc, free, exit, & the functions of man 3 stdarg```.
 
-The Project is written in C and in accordance with "The Norm".
+The project is written in C and in accordance with "The Norm".
 
 #### --The Norm--
 
