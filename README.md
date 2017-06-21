@@ -5,7 +5,7 @@ The 1st project of the algorithms branch at 42us
 
 The goal of ft_printf is to recreate the full formatted string functionality of printf. Specifically, my ft_printf:
 
-    • Manages conversions sSpdDioOuUxXcCn and %% (including unicode characters)
+    • Manages conversions sSpdDioOuUxXcCn and %% (including multibyte characters)
     • Manages flags #0-+*' and space
     • Manages minimum field-width
     • Manages precision
