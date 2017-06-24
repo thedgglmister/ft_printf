@@ -10,6 +10,7 @@ The goal of ft_printf is to recreate the full formatted string functionality of 
     • Manages minimum field-width
     • Manages precision
     • Manages flags hh, h, l, ll, j, & z
+    • Reproduces undefined behavior of printf
     • Manages an additional %b conversion to print binary
 
 Functions allowed: ```write, malloc, free, exit, & the functions of man 3 stdarg```.
