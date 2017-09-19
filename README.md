@@ -1,5 +1,5 @@
 # ft_printf
-The 1st project of the algorithms branch at 42us
+The 1st project of the algorithms branch at 42 Silicon Valley
 
 ### --Project Description--
 
@@ -25,4 +25,4 @@ The project is written in C and in accordance with "The Norm".
     • One single variable declaration per line; cannot stick declaration and initialisation on the same line
     • No more than 5 variables per bloc
     • No more than 4 parameters per function
-    • Forbidden functions are: [for] [do ... while] [switch] [case] [goto]
+    • Forbidden keywords are: [for] [do ... while] [switch] [case] [goto]
